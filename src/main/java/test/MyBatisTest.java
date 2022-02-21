@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ibatis.io.Resources;
@@ -12,13 +15,18 @@ import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.junit.Assert;
-import member.model.dao.MemberMapper;
+
+import member.model.vo.LibRegiNumType;
 import member.model.vo.Member;
+import member.model.vo.Member2;
 
 class MyBatisTest {
 
@@ -35,8 +43,7 @@ class MyBatisTest {
 	@Disabled
 	public void getStarted(){
 		try (SqlSession session = sqlSessionFactory.openSession()) {
-			  MemberMapper mapper = session.getMapper(MemberMapper.class);
-			  Member member = mapper.findByEmail("user1@gmail.com");
+			  Member member = session.selectOne("member.model.dao.MemberMapper.findByEmail", "user1@gmail.com");
 			  System.out.println(member);
 		}
 	}
@@ -47,6 +54,7 @@ class MyBatisTest {
 	// mybatis-config.xml 파일에 없는 me 속성을 config.properties 파일에서
 	// 가져와 출력하는 것을 볼 수 있습니다.
 	@Test
+	@Disabled
 	public void externalPropertiesFileTest() throws IOException {
 		Properties prop = new Properties();
 		prop.load(Resources.getResourceAsStream("mybatis/config.properties"));
@@ -74,11 +82,50 @@ class MyBatisTest {
 			
 			prop.put("username", "LIBRARY2");
 			prop.put("me", "kim");
+			
 			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputStream,prop);
 			Properties properties = factory.getConfiguration().getVariables();
 			
-			Assert.assertEquals(properties.get("me"), "kim");			
+			Assert.assertEquals(properties.get("me"), "kim");
 		}
 	}
-
+	
+	@Test
+	@Disabled
+	public void typeAliasTest() throws IOException {
+		String resource = "mybatis/mybatis-config.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		
+		Map<String, Class<?>> map = sqlSessionFactory.getConfiguration().getTypeAliasRegistry().getTypeAliases();
+		
+		for(String s : map.keySet())
+		{
+			if(s.equals("member")) 
+			{
+				System.out.println(s + "=" + map.get(s));
+			}
+		}
+	}
+	
+	@Test
+	@Disabled
+	public void typeHandlerTest() throws IOException {
+		String resource = "mybatis/mybatis-config.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		
+		try(SqlSession sqlSession = sqlSessionFactory.openSession()){
+			Member member = sqlSession.selectOne("user1@gmail.com");
+			System.out.println(member);
+		}
+	}
+	
+	@Test
+	public void handlingEnumTest() {
+		try(SqlSession sqlSession = sqlSessionFactory.openSession()){
+			Member2 member = sqlSession.selectOne("member.model.dao.MemberMapper.findByNum",LibRegiNumType.한남대학교);
+			System.out.println(member);
+		}
+	}
 }

@@ -4,4 +4,22 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member.model.dao.MemberMapper">
 
+	<select id="findByEmail" parameterType="String" resultType="Member">
+		select * from member where mem_email = #{mem_email}
+	</select>
+
+
+	<resultMap type="member.model.vo.Member2" id="membermap">
+		<id column="mem_num" property="mem_num"/>
+		<result column="mem_name" property="mem_name"/>
+		<result column="mem_email" property="mem_email"/>
+		<result column="lib_regi_num" property="lib_regi_num"/>
+	</resultMap>
+
+	<select id="findByNum" parameterType="mybatis.typehandler.LibRegiNumTypeHandler" resultMap="membermap">
+		select * from member where mem_num = #{mem_num}
+	</select>
+
+	
+
 </mapper>

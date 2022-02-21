@@ -4,22 +4,22 @@ import java.sql.Date;
 
 import org.apache.ibatis.type.Alias;
 
-@Alias("member")
-public class Member {
+@Alias("member2")
+public class Member2 {
 	private int mem_num;
 	private String pwd;
 	private String mem_email;
 	private String mem_name;
-	private int lib_regi_num;
+	private LibRegiNumType lib_regi_num;
 	private int loan_num;
 	private int rsr_num;
 	private Date due_date;
 	private Date mtl_loan_date;
 
-	public Member() {
+	public Member2() {
 	}
 
-	private Member(Builder builder) {
+	private Member2(Builder builder) {
 		this.mem_num = builder.mem_num;
 		this.pwd = builder.pwd;
 		this.mem_email = builder.mem_email;
@@ -36,7 +36,7 @@ public class Member {
 		private String pwd;
 		private String mem_email;
 		private String mem_name;
-		private int lib_regi_num;
+		private LibRegiNumType lib_regi_num;
 		private int loan_num;
 		private int rsr_num;
 		private Date due_date;
@@ -61,7 +61,7 @@ public class Member {
 			return this;
 		}
 
-		public Builder lib_regi_num(int lib_regi_num) {
+		public Builder lib_regi_num(LibRegiNumType lib_regi_num) {
 			this.lib_regi_num = lib_regi_num;
 			return this;
 		}
@@ -86,8 +86,8 @@ public class Member {
 			return this;
 		}
 
-		public Member build() {
-			return new Member(this);
+		public Member2 build() {
+			return new Member2(this);
 		}
 
 	}
@@ -108,7 +108,7 @@ public class Member {
 		return mem_name;
 	}
 
-	public int getLib_regi_num() {
+	public LibRegiNumType getLib_regi_num() {
 		return lib_regi_num;
 	}
 
