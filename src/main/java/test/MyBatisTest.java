@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.RoundingMode;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -29,6 +32,8 @@ import member.model.vo.LibRegiNumType2;
 import member.model.vo.Member;
 import member.model.vo.Member2;
 import member.model.vo.Member3;
+import mybatis.objectfactory.MemberObjectFactory;
+import mybatis.typehandler.ExampleTypeHandler;
 
 class MyBatisTest {
 
@@ -149,6 +154,7 @@ class MyBatisTest {
 	}
 	
 	@Test
+	@Disabled
 	public void enumOrdinalTypeHandlerSelectTest() {
 		try(SqlSession sqlSession = sqlSessionFactory.openSession()){
 			Member3 member = sqlSession.selectOne("member.model.dao.MemberMapper.findByNum2",154);
@@ -202,4 +208,52 @@ class MyBatisTest {
 			sqlSession.commit();
 		}
 	}
+	
+	@Test
+	@Disabled
+	public void objectFactoryTest() {
+		MemberObjectFactory factory = new MemberObjectFactory();
+		Member member = factory.create(Member.class);	// default Member 鸥涝 按眉 积己
+		System.out.println(member);
+
+		
+		List<Class<?>> typeList = new ArrayList<Class<?>>();
+		typeList.add(int.class);
+		typeList.add(String.class);
+		typeList.add(String.class);
+		typeList.add(String.class);
+		typeList.add(int.class);
+		typeList.add(int.class);
+		typeList.add(int.class);
+		typeList.add(Date.class);
+		typeList.add(Date.class);
+		
+		List<Object> argsList = new ArrayList<Object>();
+		argsList.add(-1);
+		argsList.add("password");
+		argsList.add("user14@gmail.com");
+		argsList.add("全辨悼");
+		argsList.add(1);
+		argsList.add(0);
+		argsList.add(0);
+		argsList.add(null);
+		argsList.add(null);
+		
+		Member member2 = factory.create(Member.class, typeList, argsList);
+		System.out.println(member2);
+		
+		System.out.println(factory.isCollection(List.class));	// true
+
+	}
+	
+	@Test
+	public void pluginsTest() {
+		Member member = new Member.Builder(165)
+									.build();
+		try(SqlSession sqlSession = sqlSessionFactory.openSession()){
+			sqlSession.update("member.model.dao.MemberMapper.update",member);
+			sqlSession.commit();
+		}
+	}
 }
+

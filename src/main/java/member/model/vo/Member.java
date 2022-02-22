@@ -18,6 +18,19 @@ public class Member {
 
 	public Member() {
 	}
+	
+	public Member(int mem_num, String pwd, String mem_email, String mem_name, int lib_regi_num, int loan_num,
+			int rsr_num, Date due_date, Date mtl_loan_date) {
+		this.mem_num = mem_num;
+		this.pwd = pwd;
+		this.mem_email = mem_email;
+		this.mem_name = mem_name;
+		this.lib_regi_num = lib_regi_num;
+		this.loan_num = loan_num;
+		this.rsr_num = rsr_num;
+		this.due_date = due_date;
+		this.mtl_loan_date = mtl_loan_date;
+	}
 
 	private Member(Builder builder) {
 		this.mem_num = builder.mem_num;

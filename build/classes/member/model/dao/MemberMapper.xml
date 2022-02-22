@@ -52,4 +52,10 @@
 		insert into member (mem_num, pwd, mem_email, mem_name, lib_regi_num)
 		values (mem_num_seq.nextval, #{pwd}, #{mem_email}, #{mem_name}, #{lib_regi_num, typeHandler=mybatis.typehandler.LibRegiNumTypeHandler2})
 	</insert>
+	
+	
+	<!-- plugin 테스트 예제 -->
+	<update id="update" parameterType="member.model.vo.Member">
+		update member set loan_num=#{loan_num} where mem_num = #{mem_num}
+	</update>
 </mapper>

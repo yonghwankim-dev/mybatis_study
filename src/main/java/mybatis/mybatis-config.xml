@@ -19,12 +19,19 @@
   		<typeHandler javaType="String"
   					jdbcType="VARCHAR"
   					handler="mybatis.typehandler.ExampleTypeHandler"/> <!-- typehandler 설정방법1 -->
-  		<!-- <package name="mybatis.typehandler"/> -->	<!-- typehandler 설정방법2 -->
-  		
-  		  		
-  		  
+  		<!-- <package name="mybatis.typehandler"/> -->	<!-- typehandler 설정방법2 -->	  
 	</typeHandlers>
 	
+	<objectFactory type="mybatis.objectfactory.MemberObjectFactory">
+  		<property name="someProperty" value="100"/>
+	</objectFactory>
+
+
+	<plugins>
+	  <plugin interceptor="mybatis.plugin.ExamplePlugin">
+	    <property name="someProperty" value="100"/>
+	  </plugin>
+	</plugins>	
 	<environments default="development">
 
 		<environment id="development">
