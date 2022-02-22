@@ -14,8 +14,8 @@
 	<typeHandlers>
 		<!-- Enum 타입 핸들러 -->
   		<typeHandler handler="mybatis.typehandler.LibRegiNumTypeHandler"/>
-		<!-- <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"/>-->
-		
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="member.model.vo.LibRegiNumType2"/>
+				
   		<typeHandler javaType="String"
   					jdbcType="VARCHAR"
   					handler="mybatis.typehandler.ExampleTypeHandler"/> <!-- typehandler 설정방법1 -->

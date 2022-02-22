@@ -8,18 +8,48 @@
 		select * from member where mem_email = #{mem_email}
 	</select>
 
-
+	<!-- EnumTypeHandler select, insert 예제 -->
 	<resultMap type="member.model.vo.Member2" id="membermap">
 		<id column="mem_num" property="mem_num"/>
 		<result column="mem_name" property="mem_name"/>
 		<result column="mem_email" property="mem_email"/>
 		<result column="lib_regi_num" property="lib_regi_num"/>
 	</resultMap>
-
 	<select id="findByNum" parameterType="mybatis.typehandler.LibRegiNumTypeHandler" resultMap="membermap">
 		select * from member where mem_num = #{mem_num}
 	</select>
+	<insert id="insert" parameterType="member.model.vo.Member2">
+		insert into member (mem_num, pwd, mem_email, mem_name, lib_regi_num)
+		values (mem_num_seq.nextval, #{pwd}, #{mem_email}, #{mem_name}, #{lib_regi_num})
+	</insert>
 
+	<!-- enumOrdinalTypeHander select, insert 예제 -->
+	<resultMap type="member.model.vo.Member3" id="membermap2">
+		<id column="mem_num" property="mem_num"/>
+		<result column="mem_name" property="mem_name"/>
+		<result column="mem_email" property="mem_email"/>
+		<result column="lib_regi_num" property="lib_regi_num"/>
+	</resultMap>
+	<select id="findByNum2" resultMap="membermap2">
+		select * from member where mem_num = #{mem_num}
+	</select>
+	<insert id="insert2" parameterType="member.model.vo.Member3">
+		insert into member (mem_num, pwd, mem_email, mem_name, lib_regi_num)
+		values (mem_num_seq.nextval, #{pwd}, #{mem_email}, #{mem_name}, #{lib_regi_num})
+	</insert>
 	
-
+	<!-- EnumTypeHandler 명시적 설정 예제-->	
+	<resultMap type="member.model.vo.Member3" id="membermap3">
+		<id column="mem_num" property="mem_num"/>
+		<result column="mem_name" property="mem_name"/>
+		<result column="mem_email" property="mem_email"/>
+		<result column="lib_regi_num" property="lib_regi_num" typeHandler="mybatis.typehandler.LibRegiNumTypeHandler2"/>
+	</resultMap>
+	<select id="findByNum3" resultMap="membermap3">
+		select * from member where mem_num = #{mem_num}
+	</select>
+	<insert id="insert3" parameterType="member.model.vo.Member3">
+		insert into member (mem_num, pwd, mem_email, mem_name, lib_regi_num)
+		values (mem_num_seq.nextval, #{pwd}, #{mem_email}, #{mem_name}, #{lib_regi_num, typeHandler=mybatis.typehandler.LibRegiNumTypeHandler2})
+	</insert>
 </mapper>
